@@ -28,9 +28,7 @@
 
 ## Required libraries
 * pandas
-* googlefinance.client 1.3.0
-  * gets market data
-  * need to update the client.py file for all the google finance URL from https://www.google.com/finance/getprices to https://finance.google.com/finance/getprices
+* pydispatcher - message dispatch and subscribe
 * stockstats 0.2.0
   * technical indicator calculation (SMA, KDJ etc)
 
