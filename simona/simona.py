@@ -2,7 +2,7 @@ import pandas as pd
 from pydispatch import dispatcher
 from stockstats import StockDataFrame
 
-from dataVendor.dataVendor import DataVendor
+from simona.dataVendor.dataVendor import DataVendor
 from classes.feed import Feed
 
 class Simona:
@@ -25,6 +25,7 @@ class Simona:
 
   def __initialization(self):
     self.__updateData()
+
 
   # update all data via looping over tickers , then get dataframe from dataVendor,
   # calculate and update technical indicators then truncate table frame into the size
