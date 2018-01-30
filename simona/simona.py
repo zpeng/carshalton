@@ -73,7 +73,7 @@ class Simona:
         feed.ticker = ticker
         feed.timestamp = index
         feed.price = row['Close']
-        feed.Volume = row['Close']
+        feed.Volume = row['Volume']
         feed.kdj_k = row['KDJ_K']
         feed.kdj_d = row['KDJ_D']
         feed.kdj_j = row['KDJ_J']
