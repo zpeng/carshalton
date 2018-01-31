@@ -20,7 +20,7 @@ def get_price_data(query):
 
 
 
-ticker = 'HSBA'
+ticker = 'IMB'
 interval = '900' # 15 mins
 period = '6M'
 
