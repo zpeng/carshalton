@@ -1,9 +1,0 @@
-config = {
-	'i': "1800", # Interval size in seconds ("86400" = 1 day intervals)
-	'x': "LON", # Stock exchange symbol on which stock is traded (ex: "NASD")
-	'p': "2d" # Period (Ex: "1Y" = 1 year)
-}
-
-dv = DataVendor('GoogleFinance', config)
-pd = dv.getPriceData('IMB')
-pd.to_csv('result.csv', encoding='utf-8')
