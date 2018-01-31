@@ -4,11 +4,15 @@ from stockstats import StockDataFrame
 
 from simona.dataVendor.dataVendor import DataVendor
 from classes.feed import Feed
+from portfolio.portfolio import Portfolio
+
 
 class Simona:
 
-  def __init__(self, watchList):
-    self.watchList = watchList
+  def __init__(self, portfolio):
+
+    self.portfolio = portfolio
+    self.watchList = portfolio.getWatchList()
 
     self.dataVendorConfig = {
       'i': "1800", # Interval size in seconds ("86400" = 1 day intervals)
