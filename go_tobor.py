@@ -8,20 +8,20 @@ from datetime import datetime
 
 p_config = {
 	'name': 'LSE Testing',
-  'watchList': ['HSBA','IMB','LLOY'],
-	'cash': 500000,
+  'watchList': ['HSBA','LLOY','IMB'],
+	'cash': 6000 * 100,
 	'fee': 995,
 	'tax': 0.005,
-	'sizePerInvestment' : 100000,
+	'sizePerInvestment' : 2000 * 100,
 	'maxProportionPerHolding' : 0.3,
 }
 portfolio = Portfolio(p_config)
 
 ds_config = {
 	'data_source' : {
-		'IMB': 'IMB_900_6M.csv',
-		'LLOY': 'LLOY_900_6M.csv',
-		'HSBA': 'HSBA_900_6M.csv',
+		'IMB': 'IMB_3600_13M.csv',
+		'LLOY': 'LLOY_3600_13M.csv',
+		'HSBA': 'HSBA_3600_13M.csv',
 	}
 }
 tobor = Tobor(ds_config, portfolio)
@@ -30,7 +30,7 @@ oracle = Oracle(portfolio)
 
 hugo = Hugo(portfolio)
 
-for x in range(0, 4300):
+for x in range(0, 2200):
 	print("Reading data at index: " + str(x))
 	tobor.update()
 

@@ -30,13 +30,29 @@ class Oracle:
     # the holding list need a deep copy as it might be changed by Hugo
     holdingList = copy.deepcopy(self.portfolio.getHoldingListByTicker(feed.ticker))
     for holding in holdingList:
-      instruction = str_sell_kdj(feed, holding)
+      instruction = Instruction()
+      instruction.ticker = feed.ticker
+      instruction.timestamp = feed.timestamp
+      instruction.price = feed.price
+      instruction.quantity = holding['Quantity']
+      instruction.action = 'Hold'
+      instruction.reason = ''
+      instruction.holding_id = holding['Holding_id']
+
+      instruction = str_sell_kdj(feed, holding, instruction)
       self.__broadcastFeed(instruction)
 
     # perform buy strategies check
     # we have enough cash to buy
     if self.portfolio.hasEnoughCashToInvest() and (not self.portfolio.hasReachedMaxPropertionPerHolding(feed.ticker)):
-      instruction = str_buy_kdj(feed)
+      instruction = Instruction()
+      instruction.ticker = feed.ticker
+      instruction.timestamp = feed.timestamp
+      instruction.price = feed.price
+      instruction.action = 'Hold'
+      instruction.reason = ''
+
+      instruction = str_buy_kdj(feed, instruction)
       self.__broadcastFeed(instruction)
 
   def __broadcastFeed(self, instruction):
