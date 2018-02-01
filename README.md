@@ -38,5 +38,9 @@
 
 ## How to run
 * make sure you have installed the above package
-* go to command line and type  "py go_tobor.py"
+* go to command line and type  "py go.py"
 
+
+
+# Data Issue
+Google Finance has data issue for price on the 20/11/2017
