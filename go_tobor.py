@@ -8,7 +8,7 @@ from datetime import datetime
 
 p_config = {
 	'name': 'LSE Testing',
-	'watchList': ['HSBA','LLOY','IMB'], #'watchList': ['HSBA','LLOY','IMB','BATS','ASC','BOO','VOD','BKG','PSN','GSK','AZN','BTG','TSCO','BP'],
+	'watchList': ['HSBA','LLOY','IMB','BATS','ASC','BOO','VOD','BKG','PSN','GSK','AZN','BTG','TSCO','BP'],
 	'cash': 10000 * 100,
 	'fee': 995,
 	'tax': 0.005,
@@ -18,7 +18,7 @@ p_config = {
 portfolio = Portfolio(p_config)
 
 ds_config = {
-	'mode': 'mock', # mock vs live
+	'mode': 'live', # mock vs live
 	'live': { # Using Google Finance
 	  'tickerList': p_config['watchList'],
 		'gf_config': {

@@ -5,8 +5,8 @@ import math
 def str_sell_kdj(feed, holding, instruction):
 
   target_profit = 0.05
-  stop_loss = -0.05
-  breakeven = 0.025
+  stop_loss = -0.1
+  breakeven = 0.03
 
   over_buy_k = 80
   over_buy_j = 100

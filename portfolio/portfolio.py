@@ -103,8 +103,10 @@ class Portfolio:
         print('Cash in hand: ' + str(self.cash))
         print("Overall Profit: " + str(self.__getOverallProfit()))
         print("Overall Profit %: " + str(self.__getOverallProfit() / self.initialInvestment * 100))
+        print("--------- Current Holding -----------")
+        for key, holding in self.holdingDict.items():
+            print("Ticker:" + holding['Ticker'] + '  Price:' + str(holding['Price']) + '  Quantity:'+str(holding['Quantity']) )
         print('***********************************************************')
-
 
     def evaluation(self):
         self.__writeToLogbook()
