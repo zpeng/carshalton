@@ -12,7 +12,7 @@ class MockDataSource:
 
   def __loadDataFromCSV(self):
     for k, v in self.config.items():
-      self.dataTables[k] = pd.read_csv('./tobor/mock_data/'+v , encoding='utf-8')
+      self.dataTables[k] = pd.read_csv('./mock_data/'+v , encoding='utf-8')
 
 
   def readDataRange(self, ticker, start, end):

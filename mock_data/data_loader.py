@@ -21,8 +21,8 @@ def get_price_data(query):
 
 
 ticker = 'IMB'
-interval = '900' # 15 mins
-period = '6M'
+interval = '3600' # 1 Day
+period = '13M'
 
 param = {
 	'q': ticker, # Stock symbol (ex: "AAPL")
@@ -32,6 +32,7 @@ param = {
 }
 
 data = get_price_data(param)
+print(data)
 data.to_csv(ticker+'_'+interval+'_'+period+'.csv', encoding='utf-8')
 
 
