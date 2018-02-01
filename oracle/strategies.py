@@ -22,7 +22,7 @@ def str_sell_kdj(feed, holding, instruction):
 
   elif ((feed.kdj_k > over_buy_k or feed.kdj_j > over_buy_j or feed.rsi > over_buy_rsi) and __profit_margin(holding['Price'], feed.price) > breakeven):
     instruction.action = "Sell"
-    instruction.reason = "Reached over-buy zone (kdj_k=" + str(feed.kdj_k) + " - kdj_j=" + str(feed.kdj_j) + " - RSI=" + str(feed.rsi) + ")"
+    instruction.reason = "Reached over-buy zone and profit at " + str(__profit_margin(holding['Price'], feed.price))
   return instruction
 
 
