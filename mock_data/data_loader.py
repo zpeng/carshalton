@@ -19,21 +19,19 @@ def get_price_data(query):
 	return pd.DataFrame(data, columns = ['Timestamp','Open', 'High', 'Low', 'Close', 'Volume'])
 
 
+for ticker in ['HSBA','LLOY','IMB','BATS','ASC','BOO','VOD','BKG','PSN','GSK','AZN','BTG','TSCO','BP']:
+	interval = '300' # 1 Day
+	period = '12M'
 
-ticker = 'IMB'
-interval = '3600' # 1 Day
-period = '13M'
+	param = {
+		'q': ticker, # Stock symbol (ex: "AAPL")
+		'i': interval, # Interval size in seconds ("86400" = 1 day intervals)
+		'x': "LON", # Stock exchange symbol on which stock is traded (ex: "NASD")
+		'p': period # Period (Ex: "1Y" = 1 year)
+	}
 
-param = {
-	'q': ticker, # Stock symbol (ex: "AAPL")
-	'i': interval, # Interval size in seconds ("86400" = 1 day intervals)
-	'x': "LON", # Stock exchange symbol on which stock is traded (ex: "NASD")
-	'p': period # Period (Ex: "1Y" = 1 year)
-}
-
-data = get_price_data(param)
-print(data)
-data.to_csv(ticker+'_'+interval+'_'+period+'.csv', encoding='utf-8')
+	data = get_price_data(param)
+	data.to_csv(ticker+'_'+interval+'_'+period+'.csv', encoding='utf-8')
 
 
 
