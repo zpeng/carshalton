@@ -46,3 +46,9 @@
 
 # Data Issue
 Google Finance has data issue for price on the 20/11/2017
+
+
+# To do:
+* for each holding, generate a chart 
+* adding a logger
+* write the evaluation result to a txt file

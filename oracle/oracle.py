@@ -28,7 +28,7 @@ class Oracle:
   def __think(self, feed):
     # perform sell strategies check
     # the holding list need a deep copy as it might be changed by Hugo
-    holdingList = copy.deepcopy(self.portfolio.getHoldingListByTicker(feed.ticker))
+    holdingList = copy.deepcopy(self.portfolio.getOpenedHoldingListByTicker(feed.ticker))
     for holding in holdingList:
       instruction = Instruction()
       instruction.ticker = feed.ticker

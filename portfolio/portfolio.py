@@ -17,20 +17,32 @@ class Portfolio:
         self.watchList = config['watchList']  # e.g  ['LLOY','HSBC','IMB']
 
         self.logbook = pd.DataFrame(columns = ['Timestamp', 'Holding_id', 'Ticker', 'Price', 'Quantity','Consolidation', 'Action', 'Profit', 'Reason'])
-        self.holdingDict = {}
+
+        # each holding has an id for referencing
+        self.openedHoldings = {}
+        self.closedHoldings = {}
+
         self.transactionList = []
 
     def getWatchList(self):
         return self.watchList
 
-    # Get current holding list for a particular stock
-    def getHoldingListByTicker(self, ticker):
-        holdings = []
-        for key, holding in self.holdingDict.items():
-            if holding['Ticker'] == ticker:
-                holdings.append(holding)
 
-        return holdings
+    def getOpenedHoldingListByTicker(self, ticker):
+        holdingList = []
+        for key, holding in self.openedHoldings.items():
+            if holding['Ticker'] == ticker:
+                holdingList.append(holding)
+
+        return holdingList
+
+    def getCloseHoldingListByTicker(self, ticker):
+        holdingList = []
+        for key, holding in self.closedHoldings.items():
+            if holding['Ticker'] == ticker:
+                holdingList.append(holding)
+
+        return holdingList
 
     # To buy
     def buy(self, ticker, price, timestamp, reason):
@@ -56,13 +68,13 @@ class Portfolio:
             }
             self.transactionList.append(entry)
 
-            # update holding dict
-            self.holdingDict[holding_id] = entry
+            # update opened holding dict
+            self.openedHoldings[holding_id] = entry
 
     # To sell
     def sell(self, holding_id, ticker, sell_price, sell_quantity, timestamp, reason):
-        previousHolding = self.holdingDict[holding_id]
-        self.holdingDict.pop(holding_id) # remove this entry from the holding list
+        previousHolding = self.openedHoldings[holding_id]
+        self.openedHoldings.pop(holding_id) # remove this entry from the holding list
         consolidation = sell_price * sell_quantity - self.fee
         self.cash = self.cash + consolidation  # update cash position
         profit = consolidation - previousHolding['Consolidation']
@@ -79,6 +91,7 @@ class Portfolio:
             'Profit': profit,
             'Reason': reason
         }
+        self.closedHoldings[holding_id] = entry
         self.transactionList.append(entry)
 
     # check if we have enough cash to invest
@@ -87,22 +100,10 @@ class Portfolio:
 
     def hasReachedMaxNumHoldingsPerStock(self, ticker):
         result = False
-        n = len(self.getHoldingListByTicker(ticker))
+        n = len(self.getOpenedHoldingListByTicker(ticker))
         if n >= self.maxNumHoldingsPerStock:
             result = True
         return result
-
-    def showStats(self):
-        print('***********************************************************')
-        print('Portfolio: ' + self.name)
-        print('Initial Investment: ' + str(self.initialInvestment))
-        print('Cash in hand: ' + str(self.cash))
-        print("Overall Profit: " + str(self.__getOverallProfit()))
-        print("Overall Profit %: " + str(self.__getOverallProfit() / self.initialInvestment * 100))
-        print("--------- Current Holding -----------")
-        for key, holding in self.holdingDict.items():
-            print("Ticker:" + holding['Ticker'] + '  Price:' + str(holding['Price']) + '  Quantity:'+str(holding['Quantity']) )
-        print('***********************************************************')
 
     def evaluation(self):
         self.__writeToLogbook()
@@ -116,7 +117,7 @@ class Portfolio:
 
     def __getPortfolioSize(self):
         size = 0.0
-        for key, holding in self.holdingDict.items():
+        for key, holding in self.openedHoldings.items():
             size = size + holding['Consolidation']
         size = size + self.cash
         return size
@@ -130,5 +131,56 @@ class Portfolio:
         self.logbook.at['% Change', 'Profit'] = self.logbook['Profit'].sum() / self.initialInvestment * 100
 
         file_name = self.name + " - result"  + '.csv'
-        self.logbook.to_csv(file_name, encoding='utf-8')
+        self.logbook.to_csv('./result/' + file_name, encoding='utf-8')
+
+
+    def showPortfolioStats(self):
+        print('***********************************************************')
+        print('Portfolio: ' + self.name)
+        print('Initial Investment: ' + str(self.initialInvestment))
+        print('Cash in hand: ' + str(self.cash))
+        print("Overall Profit: " + str(self.__getOverallProfit()))
+        print("Overall Profit %: " + str(self.__getOverallProfit() / self.initialInvestment * 100))
+        print("   ")
+        print("--------- Closed Holding Performace --------")
+        for ticker in self.getWatchList():
+            self.showClosedHoldingStats(ticker)
+
+        print("   ")
+        print("--------- Opened Holding -----------")
+        for key, holding in self.openedHoldings.items():
+            print("Ticker:" + holding['Ticker'] + '  Price:' + str(holding['Price']) + '  Quantity:'+str(holding['Quantity']) )
+        print('***********************************************************')
+
+
+    def showClosedHoldingStats(self, ticker):
+        num_trans = 0
+        total_profit = 0
+        total_solidation = 0
+        profit_p = 0
+        holdingList = self.getCloseHoldingListByTicker(ticker)
+        num_trans = len(holdingList) * 2 # if there is a sell, there always be a buy
+        for entry in holdingList:
+            total_solidation = total_solidation + entry['Consolidation'] - entry['Profit']
+            total_profit = total_profit + entry['Profit']
+        if (total_solidation > 0): profit_p = total_profit / total_solidation * 100
+        print('Ticker: ' + ticker)
+        print('Profit: ' + str(total_profit))
+        print('Profit %: ' + str(profit_p))
+        print('Overall Size of Investment: ' +str(total_solidation))
+        print('Number of Trades: ' + str(num_trans))
+        print('   ')
+
+
+
+# Overall Level
+# Cash In hand
+# Profit
+# Profit in %
+# Num of transaction
+# Num of Buy
+# Num of Sell
+
+
+
 
