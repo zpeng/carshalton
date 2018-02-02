@@ -41,6 +41,7 @@
 ## How to run
 * make sure you have installed the above package
 * go to command line and type  "py go.py"
+* results are located under result folder
 
 
 
@@ -49,6 +50,6 @@ Google Finance has data issue for price on the 20/11/2017
 
 
 # To do:
-* for each holding, generate a chart 
+* for each holding, generate a chart
 * adding a logger
 * write the evaluation result to a txt file

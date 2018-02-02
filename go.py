@@ -43,5 +43,4 @@ for x in range(ds_config['startIndex'], 2020):
 	tobor.update()
 
 
-portfolio.showPortfolioStats()
 portfolio.evaluation()

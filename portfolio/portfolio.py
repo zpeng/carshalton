@@ -2,6 +2,7 @@ import pandas as pd
 import time
 from datetime import datetime
 import uuid
+from io import StringIO
 
 class Portfolio:
 
@@ -21,7 +22,6 @@ class Portfolio:
         # each holding has an id for referencing
         self.openedHoldings = {}
         self.closedHoldings = {}
-
         self.transactionList = []
 
     def getWatchList(self):
@@ -106,6 +106,7 @@ class Portfolio:
         return result
 
     def evaluation(self):
+        self.__savePortfolioResult()
         self.__writeToLogbook()
 
     def __getOverallProfit(self):
@@ -114,14 +115,12 @@ class Portfolio:
             totalProfit = totalProfit + trans['Profit']
         return totalProfit
 
-
     def __getPortfolioSize(self):
         size = 0.0
         for key, holding in self.openedHoldings.items():
             size = size + holding['Consolidation']
         size = size + self.cash
         return size
-
 
     def __writeToLogbook(self):
         for entry in self.transactionList:
@@ -133,27 +132,31 @@ class Portfolio:
         file_name = self.name + " - result"  + '.csv'
         self.logbook.to_csv('./result/' + file_name, encoding='utf-8')
 
+    def __savePortfolioResult(self):
+        file_name = self.name + " - result"  + '.txt'
+        f = open('./result/' + file_name,'w')
+        self.__generatePortfolioStatsInStringIO(f)
+        f.close()
 
-    def showPortfolioStats(self):
-        print('***********************************************************')
-        print('Portfolio: ' + self.name)
-        print('Initial Investment: ' + str(self.initialInvestment))
-        print('Cash in hand: ' + str(self.cash))
-        print("Overall Profit: " + str(self.__getOverallProfit()))
-        print("Overall Profit %: " + str(self.__getOverallProfit() / self.initialInvestment * 100))
-        print("   ")
-        print("--------- Closed Holding Performace --------")
+    def __generatePortfolioStatsInStringIO(self, output):
+        output.write('********************** Result ***************************\n')
+        output.write('Portfolio: ' + self.name + '\n')
+        output.write('Initial Investment: ' + str(self.initialInvestment) +'\n')
+        output.write('Cash in hand: ' + str(self.cash) + '\n')
+        output.write("Overall Profit: " + str(self.__getOverallProfit()) + '\n')
+        output.write("Overall Profit %: " + str(self.__getOverallProfit() / self.initialInvestment * 100) + '\n')
+        output.write("\n")
+        output.write("--------- Closed Holdings --------\n")
         for ticker in self.getWatchList():
-            self.showClosedHoldingStats(ticker)
+            self.__generateClosedHoldingStatsInStringIO(ticker, output)
 
-        print("   ")
-        print("--------- Opened Holding -----------")
+        output.write("\n")
+        output.write("--------- Opened Holdings -----------\n")
         for key, holding in self.openedHoldings.items():
-            print("Ticker:" + holding['Ticker'] + '  Price:' + str(holding['Price']) + '  Quantity:'+str(holding['Quantity']) )
-        print('***********************************************************')
+            output.write("Ticker:" + holding['Ticker'] + '  Price:' + str(holding['Price']) + '  Quantity:'+str(holding['Quantity']) + '\n')
+        output.write('***********************************************************\n')
 
-
-    def showClosedHoldingStats(self, ticker):
+    def __generateClosedHoldingStatsInStringIO(self, ticker, outputIO):
         num_trans = 0
         total_profit = 0
         total_solidation = 0
@@ -164,14 +167,12 @@ class Portfolio:
             total_solidation = total_solidation + entry['Consolidation'] - entry['Profit']
             total_profit = total_profit + entry['Profit']
         if (total_solidation > 0): profit_p = total_profit / total_solidation * 100
-        print('Ticker: ' + ticker)
-        print('Profit: ' + str(total_profit))
-        print('Profit %: ' + str(profit_p))
-        print('Overall Size of Investment: ' +str(total_solidation))
-        print('Number of Trades: ' + str(num_trans))
-        print('   ')
-
-
+        outputIO.write('Ticker: ' + ticker + '\n')
+        outputIO.write('Profit: ' + str(total_profit) + '\n')
+        outputIO.write('Profit %: ' + str(profit_p) + '\n')
+        outputIO.write('Overall Size of Investment: ' + str(total_solidation) + '\n')
+        outputIO.write('Number of Trades: ' + str(num_trans) + '\n')
+        outputIO.write('\n')
 
 # Overall Level
 # Cash In hand
