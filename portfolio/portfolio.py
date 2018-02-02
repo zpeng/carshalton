@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 import uuid
 from io import StringIO
+import glob, os, os.path
 import matplotlib.pyplot as plt
 
 class Portfolio:
@@ -112,6 +113,7 @@ class Portfolio:
         return result
 
     def evaluation(self):
+        self.__cleanResultFolder()
         self.__savePortfolioResult()
         self.__writeToLogbook()
         self.__generateCharts()
@@ -157,6 +159,8 @@ class Portfolio:
         output.write('Portfolio: ' + self.name + '\n')
         output.write('Test finish at: ' + now.strftime("%Y-%m-%d %H:%M") + '\n')
         output.write('Initial Investment: ' + str(self.initialInvestment) +'\n')
+        output.write('Watch List: ' + ', '.join(self.watchList) + '\n')
+        output.write('No of stock to Watch: ' + str(len(self.watchList)) + '\n')
         output.write('Cash in hand: ' + str(self.cash) + '\n')
         output.write("Overall Profit: " + str(self.__getOverallProfit()) + '\n')
         output.write("Overall Profit %: " + str(self.__getOverallProfit() / self.initialInvestment * 100) + '\n')
@@ -166,7 +170,7 @@ class Portfolio:
             self.__generateClosedHoldingStatsInStringIO(ticker, output)
 
         output.write("\n")
-        output.write("--------- Opened Holdings -----------\n")
+        output.write("--------- Current Holdings -----------\n")
         for key, holding in self.openedHoldings.items():
             output.write("Ticker:" + holding['Ticker'] + '  Price:' + str(holding['Price']) + '  Quantity:'+str(holding['Quantity']) + '\n')
         output.write('***********************************************************\n')
@@ -219,6 +223,19 @@ class Portfolio:
         # save the dataTable dump
         file_path = self.resultFolderPath + ticker + ".csv"
         data.to_csv(file_path, encoding='utf-8')
+
+    def __cleanResultFolder(self):
+        filelist = glob.glob(os.path.join(self.resultFolderPath, "*.csv"))
+        for f in filelist:
+            os.remove(f)
+
+        filelist = glob.glob(os.path.join(self.resultFolderPath, "*.png"))
+        for f in filelist:
+            os.remove(f)
+
+        filelist = glob.glob(os.path.join(self.resultFolderPath, "*.txt"))
+        for f in filelist:
+            os.remove(f)
 
 
 

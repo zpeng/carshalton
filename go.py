@@ -9,7 +9,7 @@ from datetime import datetime
 
 p_config = {
 	'name': 'LSE Testing',
-	'watchList': ['HSBA','LLOY','IMB','BATS','ASC','BOO','VOD','BKG','PSN','GSK','AZN','BTG','TSCO','BP'],
+	'watchList': ['HSBA','LLOY','BATS','ASC','BOO','VOD','BKG','PSN','GSK','AZN','BTG','TSCO','BP','AAL','BLT','RIO'],
 	'cash': 10000 * 100,
 	'fee': 995,
 	'tax': 0.005,
@@ -28,7 +28,6 @@ ds_config = {
 		},
 	},
 	'mock' : { # local CSV data
-		'IMB': 'IMB_3600_13M.csv',
 		'LLOY': 'LLOY_3600_13M.csv',
 		'HSBA': 'HSBA_3600_13M.csv',
 	},
