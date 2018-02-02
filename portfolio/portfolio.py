@@ -11,7 +11,7 @@ class Portfolio:
         self.cash = config['cash']
         self.initialInvestment = self.cash
         self.sizePerInvestment = config['sizePerInvestment']
-        self.maxProportionPerHolding = config['maxProportionPerHolding']
+        self.maxNumHoldingsPerStock = config['maxNumHoldingsPerStock']
         self.fee = config['fee']
         self.tax = config['tax']
         self.watchList = config['watchList']  # e.g  ['LLOY','HSBC','IMB']
@@ -85,14 +85,10 @@ class Portfolio:
     def hasEnoughCashToInvest(self):
         return self.cash >= self.sizePerInvestment
 
-    def hasReachedMaxPropertionPerHolding(self, ticker):
+    def hasReachedMaxNumHoldingsPerStock(self, ticker):
         result = False
-        holdingList = self.getHoldingListByTicker(ticker)
-        totalHolding = 0.0
-        for holding in holdingList:
-            totalHolding = totalHolding + holding['Consolidation']
-        pct = totalHolding / self.__getPortfolioSize()
-        if pct >= self.maxProportionPerHolding:
+        n = len(self.getHoldingListByTicker(ticker))
+        if n >= self.maxNumHoldingsPerStock:
             result = True
         return result
 

@@ -44,7 +44,7 @@ class Oracle:
 
     # perform buy strategies check
     # we have enough cash to buy
-    if self.portfolio.hasEnoughCashToInvest() and (not self.portfolio.hasReachedMaxPropertionPerHolding(feed.ticker)):
+    if self.portfolio.hasEnoughCashToInvest() and (not self.portfolio.hasReachedMaxNumHoldingsPerStock(feed.ticker)):
       instruction = Instruction()
       instruction.ticker = feed.ticker
       instruction.timestamp = feed.timestamp

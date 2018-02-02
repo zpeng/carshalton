@@ -13,7 +13,7 @@ p_config = {
 	'fee': 995,
 	'tax': 0.005,
 	'sizePerInvestment' : 2000 * 100,
-	'maxProportionPerHolding' : 0.2,
+	'maxNumHoldingsPerStock' : 1,
 }
 portfolio = Portfolio(p_config)
 
@@ -22,9 +22,9 @@ ds_config = {
 	'live': { # Using Google Finance
 	  'tickerList': p_config['watchList'],
 		'gf_config': {
-			'i': 900, # Interval size in seconds ("86400" = 1 day intervals)
+			'i': 3600, # Interval size in seconds ("86400" = 1 day intervals)
 			'x': "LON", # Stock exchange symbol on which stock is traded (ex: "NASD")
-			'p': "6M", # Period (Ex: "1Y" = 1 year)
+			'p': "12M", # Period (Ex: "1Y" = 1 year)
 		},
 	},
 	'mock' : { # local CSV data
@@ -38,7 +38,7 @@ tobor = Tobor(ds_config, portfolio)
 oracle = Oracle(portfolio)
 hugo = Hugo(portfolio)
 
-for x in range(ds_config['startIndex'], 4300):
+for x in range(ds_config['startIndex'], 2020):
 	print("Reading data point at index: " + str(x))
 	tobor.update()
 

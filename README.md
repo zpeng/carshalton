@@ -21,19 +21,21 @@
   * listen to Oracle and ready to receive instruction
   * execute the instruction via portfolio object
 
-
 * Portfolio
   * holds the context of the program such as the watch list, investment size, etc
   * portfolio will be pass to other modules for reference
   * internally has a holding list (per stock) and transaction list (all the buy/sell transaction)
-  * calculate profit and loss based on the log transaction
-  * write the transaction to a csv file
-
+  * by the end of the day
+    * calculate profit and loss based on the log transaction
+    * write the transaction to a csv file
+    * produce chart for each holding
 
 ## Required libraries
 * pandas
+* matplotlib - charting
 * pydispatcher - message dispatch and subscribe
 * stockstats 0.2.0 - technical indicator calculation (SMA, KDJ etc)
+
 
 
 ## How to run
