@@ -28,7 +28,7 @@
   * by the end of the day
     * calculate profit and loss based on the log transaction
     * write the transaction to a csv file
-    * produce chart for each holding
+    * plot and save chart for each holding
 
 ## Required libraries
 * pandas
@@ -50,6 +50,4 @@ Google Finance has data issue for price on the 20/11/2017
 
 
 # To do:
-* for each holding, generate a chart
 * adding a logger
-* write the evaluation result to a txt file

@@ -1,20 +1,17 @@
 import pandas as pd
 from pydispatch import dispatcher
 from stockstats import StockDataFrame
-
 from dataSource.dataSource import DataSource
 from classes.feed import Feed
 from portfolio.portfolio import Portfolio
 
 class Tobor:
 
-  def __init__(self, ds_config, portfolio):
-
-    dataSource = DataSource(ds_config) # dataSource has loaded up with data
+  def __init__(self, dataSource, portfolio, startIndex):
 
     self.portfolio = portfolio
 
-    self.dataReadIndex = ds_config['startIndex'] # reads data from index 10
+    self.dataReadIndex = startIndex # reads data from index 10
     self.dataTables = dataSource.getDataTables()
     self.__initialization()
 

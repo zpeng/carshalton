@@ -20,6 +20,9 @@ class DataSource:
   def getDataTables(self):
     return self.dataTables
 
+  def getDataTableByTicker(self, ticker):
+    return self.dataTables[ticker]
+
   def __loadDataFromGoogleFinance(self, tickerList):
     for ticker in tickerList:
       self.dataTables[ticker] = self.googleFinance.getPriceData(ticker)

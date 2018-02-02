@@ -1,4 +1,5 @@
 import pandas as pd
+from dataSource.dataSource import DataSource
 from portfolio.portfolio import Portfolio
 from tobor.tobor import Tobor
 from oracle.oracle import Oracle
@@ -15,7 +16,6 @@ p_config = {
 	'sizePerInvestment' : 2000 * 100,
 	'maxNumHoldingsPerStock' : 1,
 }
-portfolio = Portfolio(p_config)
 
 ds_config = {
 	'mode': 'live', # mock vs live
@@ -32,15 +32,20 @@ ds_config = {
 		'LLOY': 'LLOY_3600_13M.csv',
 		'HSBA': 'HSBA_3600_13M.csv',
 	},
-	'startIndex': 10, # row index from the data source start with
 }
-tobor = Tobor(ds_config, portfolio)
+
+dataSource = DataSource(ds_config) # dataSource has loaded up with data
+portfolio = Portfolio(p_config, dataSource)
+
+startIndex = 10
+tobor = Tobor(dataSource, portfolio, startIndex)
 oracle = Oracle(portfolio)
 hugo = Hugo(portfolio)
 
-for x in range(ds_config['startIndex'], 2020):
+for x in range(startIndex, 2020):
 	print("Reading data point at index: " + str(x))
 	tobor.update()
 
-
+print("All data has been processed, just to evaluate and record the result...")
 portfolio.evaluation()
+print("All Done!")

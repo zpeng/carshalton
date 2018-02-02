@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 import uuid
 from io import StringIO
+import matplotlib.pyplot as plt
 
 class Portfolio:
 
@@ -24,9 +25,10 @@ class Portfolio:
         self.closedHoldings = {}
         self.transactionList = []
 
+        self.dataSource = dataSource
 
-        # get dataTables for charting
-        self.ds
+        # other config
+        self.resultFolderPath = './result/'
 
     def getWatchList(self):
         return self.watchList
@@ -112,6 +114,13 @@ class Portfolio:
     def evaluation(self):
         self.__savePortfolioResult()
         self.__writeToLogbook()
+        self.__generateCharts()
+
+    def __getTransactionListByTicker(self, ticker):
+        transList = []
+        for trans in self.transactionList:
+            if trans['Ticker'] == ticker: transList.append(trans)
+        return transList
 
     def __getOverallProfit(self):
         totalProfit = 0.0
@@ -133,8 +142,8 @@ class Portfolio:
         self.logbook.at['Sum', 'Profit'] = self.logbook['Profit'].sum()
         self.logbook.at['% Change', 'Profit'] = self.logbook['Profit'].sum() / self.initialInvestment * 100
 
-        file_name = self.name + " - result"  + '.csv'
-        self.logbook.to_csv('./result/' + file_name, encoding='utf-8')
+        file_name = self.resultFolderPath + self.name + " - result"  + '.csv'
+        self.logbook.to_csv(file_name, encoding='utf-8')
 
     def __savePortfolioResult(self):
         file_name = self.name + " - result"  + '.txt'
@@ -143,8 +152,10 @@ class Portfolio:
         f.close()
 
     def __generatePortfolioStatsInStringIO(self, output):
+        now = datetime.now()
         output.write('********************** Result ***************************\n')
         output.write('Portfolio: ' + self.name + '\n')
+        output.write('Test finish at: ' + now.strftime("%Y-%m-%d %H:%M") + '\n')
         output.write('Initial Investment: ' + str(self.initialInvestment) +'\n')
         output.write('Cash in hand: ' + str(self.cash) + '\n')
         output.write("Overall Profit: " + str(self.__getOverallProfit()) + '\n')
@@ -178,9 +189,36 @@ class Portfolio:
         outputIO.write('Number of Trades: ' + str(num_trans) + '\n')
         outputIO.write('\n')
 
+    def __generateCharts(self):
+       for ticker in self.watchList:
+           self.__plotAndSaveChartForTicker(ticker)
 
-    def
+    def __plotAndSaveChartForTicker(self, ticker):
+        # process the original dataTable again
+        data = self.dataSource.getDataTableByTicker(ticker)
+        data = data.assign(Action = '')
+        data = data.assign(Reason = '')
+        transList = self.__getTransactionListByTicker(ticker)
+        for trans in transList:
+            data.loc[data['Timestamp'] == trans['Timestamp'], 'Action'] = trans['Action']
+            data.loc[data['Timestamp'] == trans['Timestamp'], 'Reason'] = trans['Reason']
 
+        # plot and save chart
+        fig = plt.figure()
+        fig.patch.set_facecolor('white')     # Set the outer colour to white
+        ax1 = fig.add_subplot(111, ylabel='', title=ticker)
+        data['Close'].plot(ax=ax1, color='dodgerblue', lw=1., label='Close Price').set_xlabel('')
+        ax1.plot(data.loc[data['Action'] == 'Buy'].index, data.Close[data['Action'] == 'Buy'], marker='o', markersize=6, color='green', linestyle='', label='Buy')
+        ax1.plot(data.loc[data['Action'] == 'Sell'].index, data.Close[data['Action'] == 'Sell'], marker='s', markersize=6, color='red', linestyle='', label='Sell')
+        ax1.legend()
+
+        img_path = self.resultFolderPath + ticker + ".png"
+        plt.savefig(img_path, format='png', dpi=1200)
+        plt.close(fig)
+
+        # save the dataTable dump
+        file_path = self.resultFolderPath + ticker + ".csv"
+        data.to_csv(file_path, encoding='utf-8')
 
 
 
