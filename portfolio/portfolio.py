@@ -6,7 +6,7 @@ from io import StringIO
 
 class Portfolio:
 
-    def __init__(self, config):
+    def __init__(self, config, dataSource):
 
         self.name = config['name']
         self.cash = config['cash']
@@ -23,6 +23,10 @@ class Portfolio:
         self.openedHoldings = {}
         self.closedHoldings = {}
         self.transactionList = []
+
+
+        # get dataTables for charting
+        self.ds
 
     def getWatchList(self):
         return self.watchList
@@ -174,13 +178,8 @@ class Portfolio:
         outputIO.write('Number of Trades: ' + str(num_trans) + '\n')
         outputIO.write('\n')
 
-# Overall Level
-# Cash In hand
-# Profit
-# Profit in %
-# Num of transaction
-# Num of Buy
-# Num of Sell
+
+    def
 
 
 

@@ -2,7 +2,7 @@ import pandas as pd
 from pydispatch import dispatcher
 from stockstats import StockDataFrame
 
-from tobor.dataSource import DataSource
+from dataSource.dataSource import DataSource
 from classes.feed import Feed
 from portfolio.portfolio import Portfolio
 

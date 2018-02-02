@@ -1,5 +1,5 @@
 import pandas as pd
-from tobor.googleFinance import GoogleFinance
+from dataSource.googleFinance import GoogleFinance
 
 class DataSource:
 
