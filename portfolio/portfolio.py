@@ -164,6 +164,7 @@ class Portfolio:
         output.write('Cash in hand: ' + str(self.cash) + '\n')
         output.write("Overall Profit: " + str(self.__getOverallProfit()) + '\n')
         output.write("Overall Profit %: " + str(self.__getOverallProfit() / self.initialInvestment * 100) + '\n')
+        output.write('Total No of trades: ' + str(len(self.transactionList)) + '\n')
         output.write("\n")
         output.write("--------- Closed Holdings --------\n")
         for ticker in self.getWatchList():
@@ -206,6 +207,7 @@ class Portfolio:
         for trans in transList:
             data.loc[data['Timestamp'] == trans['Timestamp'], 'Action'] = trans['Action']
             data.loc[data['Timestamp'] == trans['Timestamp'], 'Reason'] = trans['Reason']
+        data.set_index('Timestamp',inplace=True)
 
         # plot and save chart
         fig = plt.figure()
