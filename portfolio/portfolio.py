@@ -213,10 +213,11 @@ class Portfolio:
         fig = plt.figure()
         fig.patch.set_facecolor('white')     # Set the outer colour to white
         ax1 = fig.add_subplot(111, ylabel='', title=ticker)
-        data['Close'].plot(ax=ax1, color='dodgerblue', lw=1., label='Close Price').set_xlabel('')
+        data['Close'].plot(ax=ax1, color='dodgerblue', lw=1.,  grid = True, label='Close Price').set_xlabel('')
         ax1.plot(data.loc[data['Action'] == 'Buy'].index, data.Close[data['Action'] == 'Buy'], marker='o', markersize=6, color='green', linestyle='', label='Buy')
         ax1.plot(data.loc[data['Action'] == 'Sell'].index, data.Close[data['Action'] == 'Sell'], marker='s', markersize=6, color='red', linestyle='', label='Sell')
         ax1.legend()
+        ax1.autoscale_view()
 
         img_path = self.resultFolderPath + ticker + ".png"
         plt.savefig(img_path, format='png', dpi=1200)
